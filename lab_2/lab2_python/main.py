@@ -1,12 +1,11 @@
 import math
-from math import sqrt, erfc
-from file_operations import *
-from mpmath import gammainc
+import mpmath
+import file_operations
 
 PI_i = [0.2148, 0.3672, 0.2305, 0.1875]
 
 
-def get_binary_string(arr):
+def get_binary_string(arr: list[int]) -> str:
     """
        Преобразует массив чисел в строку из символов '0' и '1'.
        Параметры:
@@ -16,16 +15,17 @@ def get_binary_string(arr):
        """
     s = ''
     for a in arr:
-        if a == 0:
-            s += '0'
-        elif a == 1:
-            s += '1'
-        else:
-            raise ValueError("Массив должен содержать только 0 и 1.")
+        match a:
+            case 0:
+                s += '0'
+            case 1:
+                s += '1'
+            case _:
+                raise ValueError("Массив должен содержать только 0 и 1.")
     return s
 
 
-def freq_bit_test(s):
+def freq_bit_test(s: str) -> float:
     """
        Выполняет тест на частоту битов для строки s.
        Параметры:
@@ -50,7 +50,7 @@ def freq_bit_test(s):
         return None
 
 
-def same_bits_test(s):
+def same_bits_test(s: str) -> float:
     """
         Выполняет тест на одинаковые подряд идущие биты для строки s.
         Параметры:
@@ -77,7 +77,7 @@ def same_bits_test(s):
         return None
 
 
-def get_len_seq(block):
+def get_len_seq(block: str) -> int:
     """
        Находит максимальное расстояние между нулями в блоке.
        Параметры:
@@ -101,7 +101,7 @@ def get_len_seq(block):
         return None
 
 
-def longest_ones_sequence_test(s):
+def longest_ones_sequence_test(s: str) -> float:
     """
        Выполняет тест на самую длинную последовательность единиц в блоке.
        Параметры:
@@ -119,18 +119,19 @@ def longest_ones_sequence_test(s):
             blocks_ones_length.append(get_len_seq(b))
         v_i = [0, 0, 0, 0]
         for b in blocks_ones_length:
-            if b <= 1:
-                v_i[0] += 1
-            elif b == 2:
-                v_i[1] += 1
-            elif b == 3:
-                v_i[2] += 1
-            else:
-                v_i[3] += 1
+            match b:
+                case _ if b <= 1:
+                    v_i[0] += 1
+                case 2:
+                    v_i[1] += 1
+                case 3:
+                    v_i[2] += 1
+                case _:
+                    v_i[3] += 1
         hi_sq = 0
         for i in range(4):
             hi_sq += pow(v_i[i] - 16 * PI_i[i], 2) / (16 * PI_i[i])
-        P = gammainc(3 / 2, hi_sq / 2)
+        P = mpmath.gammainc(3 / 2, hi_sq / 2)
         return P
     except Exception as e:
         print(f"Произошла ошибка: {e}")
@@ -138,7 +139,7 @@ def longest_ones_sequence_test(s):
 
 
 if __name__ == '__main__':
-    s = read_json('sequences.json')
+    s = file_operations.read_json('sequences.json')
     cpp_num = s['cpp']
     res1 = freq_bit_test(cpp_num)
     res2 = same_bits_test(cpp_num)
@@ -147,7 +148,7 @@ if __name__ == '__main__':
     cpp_str += 'Частнотный побитовый тест: ' + str(res1) + '\n'
     cpp_str += 'Тест на одинаковые подряд идущие биты: ' + str(res2) + '\n'
     cpp_str += 'Тест на самую длинную послед-ть единиц в блоке: ' + str(res3) + '\n'
-    write_file('cpp_res.txt', cpp_str)
+    file_operations.write_file('cpp_res1.txt', cpp_str)
 
     java_num = s['java']
     result1 = freq_bit_test(java_num)
@@ -157,4 +158,4 @@ if __name__ == '__main__':
     java_str += 'Частнотный побитовый тест: ' + str(result1) + '\n'
     java_str += 'Тест на одинаковые подряд идущие биты: ' + str(result2) + '\n'
     java_str += 'Тест на самую длинную послед-ть единиц в блоке: ' + str(result3) + '\n'
-    write_file('java_res.txt', java_str)
+    file_operations.write_file('java_res1.txt', java_str)

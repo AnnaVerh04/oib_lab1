@@ -31,6 +31,7 @@ def write_file(path: str, data: str) -> None:
     try:
         with open(path, "a+", encoding='UTF-8') as file:
             file.write(data)
-        print(f"The data has been successfully written to the file '{path}'.")
+    except FileNotFoundError:
+        print(f"Создан файл с названием: {path}")
     except Exception as e:
-        print(f"An error occurred while writing the file: {str(e)}")
+        print(f"Произошла ошибка при работе с файлом {path}: {e}")

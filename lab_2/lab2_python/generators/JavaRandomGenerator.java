@@ -1,6 +1,10 @@
 import java.util.Random;
 
 public class JavaRandomGenerator {
+     /*
+    * the function outputs a pseudo-random bit sequence
+    * @param number_bits The number of bits in the sequence
+    */
 
     public static void random_generator(int number_bits) {
         Random random = new Random(System.currentTimeMillis());
