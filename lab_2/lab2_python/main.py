@@ -5,44 +5,23 @@ import file_operations
 PI_i = [0.2148, 0.3672, 0.2305, 0.1875]
 
 
-def get_binary_string(arr: list[int]) -> str:
-    """
-       Преобразует массив чисел в строку из символов '0' и '1'.
-       Параметры:
-       arr (list): Массив чисел, которые должны быть равны 0 или 1.
-       Возвращает:
-       str: Строка, представляющая двоичное представление чисел из массива.
-       """
-    s = ''
-    for a in arr:
-        match a:
-            case 0:
-                s += '0'
-            case 1:
-                s += '1'
-            case _:
-                raise ValueError("Массив должен содержать только 0 и 1.")
-    return s
-
-
 def freq_bit_test(s: str) -> float:
     """
-       Выполняет тест на частоту битов для строки s.
-       Параметры:
-       s (str): Строка, содержащая битовую последовательность.
-       Возвращает:
-       P(float): Результат теста на частоту битов.
-       """
+    Выполняет тест на частоту битов для строки s.
+    Параметры:
+    s (str): Строка, содержащая битовую последовательность.
+    Возвращает:
+    P(float): Результат теста на частоту битов.
+    """
     try:
+        count_ones = s.count("1")
+        count_zeros = s.count("0")
+
+        x = count_ones - count_zeros
+
         N = len(s)
-        SN = 0
-        for a in s:
-            for i in s:
-                if i == "1":
-                    x = 1
-                else:
-                    x = -1
-                SN += 1 / math.sqrt(N) * x
+        SN = x / math.sqrt(N)
+
         P = math.erfc(SN / math.sqrt(2))
         return P
     except Exception as e:
@@ -61,8 +40,7 @@ def same_bits_test(s: str) -> float:
     try:
         N = len(s)
         zeta = 0
-        for a in s:
-            zeta += int(a)
+        zeta = sum(int(a) for a in s)
         zeta /= N
         if abs(zeta - 0.5) >= 2 / math.sqrt(N):
             return 0
@@ -110,17 +88,18 @@ def longest_ones_sequence_test(s: str) -> float:
        P(float): Результат теста на самую длинную последовательность единиц в блоке.
        """
     try:
+        block_length = 8
         # Разбиваем строку на блоки
         blocks = []
-        for i in range(0, len(s), 8):
-            blocks.append(s[i: i + 8])
+        for i in range(0, len(s), block_length):
+            blocks.append(s[i: i + block_length])
         blocks_ones_length = []
         for b in blocks:
             blocks_ones_length.append(get_len_seq(b))
         v_i = [0, 0, 0, 0]
         for b in blocks_ones_length:
             match b:
-                case _ if b <= 1:
+                case 0 | 1:
                     v_i[0] += 1
                 case 2:
                     v_i[1] += 1
@@ -129,7 +108,7 @@ def longest_ones_sequence_test(s: str) -> float:
                 case _:
                     v_i[3] += 1
         hi_sq = 0
-        for i in range(4):
+        for i in range(len(v_i)):
             hi_sq += pow(v_i[i] - 16 * PI_i[i], 2) / (16 * PI_i[i])
         P = mpmath.gammainc(3 / 2, hi_sq / 2)
         return P
