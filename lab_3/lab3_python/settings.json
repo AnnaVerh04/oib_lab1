@@ -1,0 +1,7 @@
+{
+    "text": "text.txt",
+    "text_after": "text_after.txt",
+    "rsa_public_key": "d",
+    "rsa_private_key": "f",
+    "CAST5_key": "h"
+}

@@ -11,9 +11,9 @@ class RSA:
         self.public_key = None
         self.private_key = None
 
-    def generate_keys(self, public_exponent=65537, key_size=2048):
+    def generate_key(self, key_size=2048):
         keys = rsa.generate_private_key(
-            public_exponent=public_exponent,
+            public_exponent=65537,
             key_size=key_size
         )
         self.public_key = keys.public_key()
@@ -53,7 +53,7 @@ class RSA:
 if __name__ == '__main__':
     """
     a = RSA()
-    a.generate_keys()
+    a.generate_key()
     a.get_key_to_file('public.txt', 'private.txt')
     a.get_keys_from_file('public.txt', 'private.txt')
     text = ''
