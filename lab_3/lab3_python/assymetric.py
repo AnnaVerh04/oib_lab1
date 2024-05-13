@@ -31,10 +31,12 @@ class RSA:
                                                              format=serialization.PrivateFormat.TraditionalOpenSSL,
                                                              encryption_algorithm=serialization.NoEncryption()))
 
-    def get_keys_from_file(self, path_public, path_private):
+    def get_open_key_from_file(self, path_public):
         with open(path_public, 'rb') as pem_in:
             public_bytes = pem_in.read()
         self.public_key = load_pem_public_key(public_bytes)
+
+    def get_private_key_from_file(self, path_private):
         with open(path_private, 'rb') as pem_in:
             private_bytes = pem_in.read()
         self.private_key = load_pem_private_key(private_bytes, password=None)
@@ -56,7 +58,7 @@ if __name__ == '__main__':
     a.generate_key()
     a.get_key_to_file('public.txt', 'private.txt')
     a.get_keys_from_file('public.txt', 'private.txt')
-    text = ''
+    text = 'церщшцоерщцш ааа'
     b = bytes(text, 'UTF-8')
     enc = a.encrypt_bytes(b)
     dec = a.decrypt_bytes(enc)

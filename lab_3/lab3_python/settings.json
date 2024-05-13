@@ -1,7 +1,8 @@
 {
     "text": "text.txt",
     "text_after": "text_after.txt",
-    "rsa_public_key": "d",
-    "rsa_private_key": "f",
-    "CAST5_key": "h"
+    "rsa_public_key": "rsa_public_key.txt",
+    "rsa_private_key": "rsa_private_key.txt",
+    "CAST5_key": "CAST5_key.txt",
+    "CAST5_iv": "CAST5_iv.txt"
 }

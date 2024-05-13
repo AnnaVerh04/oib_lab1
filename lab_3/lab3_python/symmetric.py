@@ -26,7 +26,7 @@ class CAST_5:
         cipher = Cipher(algorithms.CAST5(self.key), modes.CBC(iv))
         encryptor = cipher.encryptor()
         c_bytes = encryptor.update(padded_bytes) + encryptor.finalize()
-        return c_bytes, cipher
+        return c_bytes, cipher, iv
 
     def decrypt_bytes(self, bytes_, cipher):
         decryptor = cipher.decryptor()
@@ -37,17 +37,30 @@ class CAST_5:
 
 
 if __name__ == '__main__':
-    cyp = CAST_5()
-    cyp.generate_key()
-    s = bytes('Very rainy day', 'UTF-8')
-    enc, cipher = cyp.encrypt_bytes(s)
-    dec = cyp.decrypt_bytes(enc, cipher)
-    print(dec.decode('UTF-8'))
     """
     cyp = CAST_5()
     cyp.generate_key()
     s = bytes('Very rainy day', 'UTF-8')
-    enc, cipher = cyp.encrypt_bytes(s)
-    dec = cyp.decrypt_bytes(enc, cipher)
+    enc, cipher, iv = cyp.encrypt_bytes(s)
+    cipher2 = Cipher(algorithms.CAST5(cyp.key), modes.CBC(iv))
+    dec = cyp.decrypt_bytes(enc, cipher2)
     print(dec.decode('UTF-8'))
     """
+
+    import file_operation
+
+    """
+    s = bytes('Very rainy day', 'UTF-8')
+    cyp = CAST_5()
+    cyp.generate_key()
+    enc, cypher, iv = cyp.encrypt_bytes(s)
+    file_operations.write_bytes_to_file('enc.txt', enc)
+    file_operations.write_bytes_to_file('iv.txt', iv)
+    cyp.get_key_to_file('key.txt')
+    """
+    enc = file_operation.read_bytes_from_file('enc.txt')
+    iv = file_operation.read_bytes_from_file('iv.txt')
+    cyp = CAST_5()
+    cyp.get_key_from_file('key.txt')
+    cypher = Cipher(algorithms.CAST5(cyp.key), modes.CBC(iv))
+    print(cyp.decrypt_bytes(enc, cypher).decode('UTF-8'))
