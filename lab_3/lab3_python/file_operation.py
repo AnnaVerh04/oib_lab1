@@ -1,8 +1,12 @@
 import json
 
 
-# json в словарь
 def read_json(path: str) -> dict:
+    """
+        Читает данные из JSON-файла и возвращает содержимое в виде словаря.
+        path (str)- Путь к JSON-файлу для чтения.
+        dict - Содержимое JSON-файла в виде словаря.
+    """
     try:
         with open(path, 'r', encoding='UTF-8') as file:
             data = json.load(file)
@@ -13,8 +17,12 @@ def read_json(path: str) -> dict:
         print(f"При чтении файла произошла ошибка: {str(e)}")
 
 
-# запись в файл
 def write_file(path: str, data: str) -> None:
+    """
+       Записывает данные в файл.
+       path (str) - Путь к файлу, в который нужно записать данные.
+       data (str) - Строка данных для записи в файл.
+    """
     try:
         with open(path, "a+", encoding='UTF-8') as file:
             file.write(data)
@@ -24,8 +32,12 @@ def write_file(path: str, data: str) -> None:
         print(f"Произошла ошибка при работе с файлом {path}: {e}")
 
 
-# чтение из файла
 def read_file(pathname: str) -> str:
+    """
+       Читает данные из файла и возвращает их в виде строки.
+       pathname (str) - Путь к файлу для чтения.
+       str - Содержимое файла в виде строки.
+    """
     s = ''
     try:
         with open(pathname, 'r', encoding='utf-8') as file_read:
@@ -35,8 +47,12 @@ def read_file(pathname: str) -> str:
     return s
 
 
-# запись байтов в файл
-def write_bytes_to_file(path, bytes_):
+def write_bytes_to_file(path, bytes_) -> None:
+    """
+       Записывает байтовые данные в файл.
+       path (str) - Путь к файлу, в который нужно записать байтовые данные.
+       bytes_ (bytes) - Байтовые данные для записи в файл.
+       """
     try:
         with open(path, "wb") as file:
             file.write(bytes_)
@@ -46,8 +62,12 @@ def write_bytes_to_file(path, bytes_):
         print(f"Произошла ошибка при работе с файлом {path}: {e}")
 
 
-# считывание байтов из файла
-def read_bytes_from_file(pathname):
+def read_bytes_from_file(pathname) -> bytes:
+    """
+        Читает байтовые данные из файла и возвращает их.
+        pathname (str): Путь к файлу для чтения.
+        bytes: Байтовые данные из файла.
+        """
     s = ''
     try:
         with open(pathname, 'rb') as file_read:
@@ -57,5 +77,4 @@ def read_bytes_from_file(pathname):
     return s
 
 
-if __name__ == '__main__':
-    pass
+
