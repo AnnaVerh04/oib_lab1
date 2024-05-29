@@ -1,21 +1,19 @@
+import argparse
 import multiprocessing as mp
+import hashlib
 import funcs
+import file_operations
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--settings', help="Путь к json файлу с данными.", required=True)
+    parser.add_argument('-i', '--plot_image', help="Сохранять ли изображения графики зависимостей.")
+    parser.add_argument('-p', '--num_of_processes', help='Максимальное количество процессов')
+    args = parser.parse_args()
+    res = file_operations.read_json(args.settings)
+    funcs.get_plot(res['hash'], res['bins_list'], res['last_symbols'], args.num_of_processes, args.plot_image)
+
 
 if __name__ == '__main__':
-    n_o_p = 10
-    begins = ['555949']
-    end = '4301'
-
-    process_arr = []
-    queue_arr = []
-    for i in range(n_o_p):
-        queue_arr.append(mp.Queue())
-        process_arr.append(mp.Process(target=funcs.get_right_symbols, args=[begins, end, i*1000000//n_o_p, (i+1)*1000000//n_o_p, queue_arr[-1]]))
-        process_arr[-1].start()
-    for p in process_arr:
-        p.join()
-    res_total = []
-    for q in queue_arr:
-        for a in q.get():
-            res_total.append(a)
-    print(res_total)
+    main()
