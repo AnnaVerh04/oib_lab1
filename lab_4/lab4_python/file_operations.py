@@ -13,27 +13,14 @@ def read_json(path: str) -> dict:
         print(f"При чтении файла произошла ошибка: {str(e)}")
 
 
-# запись в файл
-def write_file(path: str, data: str) -> None:
+def write_card_numbers_to_json(path, keys):
     try:
-        with open(path, "a+", encoding='UTF-8') as file:
-            file.write(data)
-    except FileNotFoundError:
-        print(f"Создан файл с названием: {path}")
+        with open(path, "w", encoding='UTF-8') as file:
+            file.write('{\n\t"keys": [')
+            for i in range(len(keys) - 1):
+                file.write(keys[i])
+                file.write(', ')
+            file.write(keys[-1])
+            file.write(']\n}')
     except Exception as e:
-        print(f"Произошла ошибка при работе с файлом {path}: {e}")
-
-
-# чтение из файла
-def read_file(pathname: str) -> str:
-    s = ''
-    try:
-        with open(pathname, 'r', encoding='utf-8') as file_read:
-            s = file_read.read()
-    except FileNotFoundError as e:
-        print(f"Файл не найден: {e}")
-    return s
-
-
-if __name__ == '__main__':
-    pass
+        print(f"Произошла ошибка при работе с файлом {file}: {e}")

@@ -1,13 +1,20 @@
 import hashlib
 import multiprocessing as mp
 from matplotlib import pyplot as plt
+import tqdm
 import time
 
 
+def luna_alg_check_card_number(card_num: str):
+    card_num_arr = [int(a) for a in card_num]
+    for i in range(len(card_num_arr) - 2, -1, -2):
+        card_num_arr[i] *= 2
+        if card_num_arr[i] > 9:
+            card_num_arr[i] -= 9
+    return sum(card_num_arr) % 10 == 0
+
+
 def get_right_symbols(cur_hash, begins, end, range_b, range_e, q):
-    # begins - массив, состоящий из всех подхоядих
-    # первых 6 символов-цифр (правильные БИНы)
-    # end - последние четыре символа-цифр
     res = []
     for i in range(range_b, range_e):
         i = str(i).rjust(6, '0')
@@ -15,7 +22,6 @@ def get_right_symbols(cur_hash, begins, end, range_b, range_e, q):
             b = b + i + end
             hash_ = hashlib.sha256(b.encode()).hexdigest()
             if hash_ == cur_hash:
-                print(b)
                 res.append(b)
     q.put(res)
 
@@ -42,22 +48,28 @@ def get_dependency(cur_hash, begins, end, max_n_o_p=None):
     time_arr = []
     if max_n_o_p is None:
         max_n_o_p = int(mp.cpu_count() * 1.5)
-    for i in range(1, int(max_n_o_p)):
+
+    for i in tqdm.trange(1, int(max_n_o_p) + 1, ncols=80, desc='Total'):
+        # for i in range(1, int(max_n_o_p)+1):
         time_start = time.perf_counter()
-        res = find_right_numbers(cur_hash, begins, end, i)
+        if i == 1:
+            res2 = find_right_numbers(cur_hash, begins, end, i)
+        else:
+            res_ = find_right_numbers(cur_hash, begins, end, i)
         time_arr.append(time.perf_counter() - time_start)
-    return time_arr
+    return time_arr, res2
 
 
 def get_plot(cur_hash, begins, end, max_n_o_p=None, save_img=True):
     if max_n_o_p is None:
         max_n_o_p = int(mp.cpu_count() * 1.5)
-    time_arr = get_dependency(cur_hash, begins, end, max_n_o_p)
+    time_arr, card_codes = get_dependency(cur_hash, begins, end, max_n_o_p)
     fig = plt.figure(figsize=(30, 5))
     plt.ylabel('Время поиска коллизии, с')
     plt.xlabel('Количество процессов')
-    plt.plot(list(range(1, int(max_n_o_p))), time_arr, color='green', linestyle='--', marker='x', linewidth=1,
+    plt.plot(list(range(1, int(max_n_o_p) + 1)), time_arr, color='green', linestyle='--', marker='x', linewidth=1,
              markersize=4)
     if save_img:
         plt.savefig("res.png")
     plt.show()
+    return card_codes
