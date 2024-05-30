@@ -67,7 +67,7 @@ def get_plot(cur_hash, begins, end, max_n_o_p=None, save_img=True):
     fig = plt.figure(figsize=(30, 5))
     plt.ylabel('Время поиска коллизии, с')
     plt.xlabel('Количество процессов')
-    plt.plot(list(range(1, int(max_n_o_p) + 1)), time_arr, color='green', linestyle='--', marker='x', linewidth=1,
+    plt.plot(list(range(1, int(max_n_o_p) + 1)), time_arr, color='red', linestyle='-', marker='o', linewidth=1,
              markersize=4)
     if save_img:
         plt.savefig("res.png")
